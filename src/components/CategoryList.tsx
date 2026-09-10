@@ -3,13 +3,14 @@ import type {Category} from "../types.ts";
 export type CategoryListProps = {
     categories: Category[];
     setUpdatingCategory: (category: Category) => void;
-    // setUpdatingCategoryValue: (value: string) => void;
-}
+    setDeletingCategory: (category: Category) => void;
+    }
 
 export function CategoryList(
     {
         categories,
-        setUpdatingCategory
+        setUpdatingCategory,
+        setDeletingCategory
     } : CategoryListProps) {
     return (
         <div className="list">
@@ -24,7 +25,7 @@ export function CategoryList(
                             <td>{category.name}</td>
                             <td>
                                 <button onClick={() => setUpdatingCategory(category)}>Edit</button>
-                                <button>Delete</button>
+                                <button onClick={() => setDeletingCategory(category)}>Delete</button>
                             </td>
                         </tr>
                     ))

@@ -1,8 +1,10 @@
-import { useState } from 'react'
+import {useState} from 'react'
 import './App.css'
 import type {Category} from "./types.ts";
 import {CategoryCreateForm} from "./components/CategoryCreateForm.tsx";
 import {CategoryList} from "./components/CategoryList.tsx";
+import {CategoryUpdateForm} from "./components/CategoryUpdateForm.tsx";
+import * as React from "react";
 
 type Product = {
     name: string,
@@ -14,6 +16,7 @@ function App() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [updatingCategory, setUpdatingCategory] = useState<Category | null>(null);
   const [updatingCategoryValue, setUpdatingCategoryValue] = useState('');
+  // const [deletingCategory, setDeletingCategory] = useState<Category | null>(null);
 
   const [nameValue, setNameValue] = useState('');
   const [priceValue, setPriceValue] = useState(0);
@@ -27,19 +30,7 @@ function App() {
       setPriceValue(0);
   }
 
-  function handleUpdate(e: React.SubmitEvent){
-      e.preventDefault();
-      if(!updatingCategory) return;
 
-      setCategories(categories.map(category =>
-          category.id === updatingCategory.id
-              ? {...updatingCategory, name: updatingCategoryValue}
-              : category
-      ));
-
-      setUpdatingCategory(null);
-      setUpdatingCategoryValue('');
-  }
   return (
       <div className={"hero"}>
           <form onSubmit={handleSubmit}>
@@ -62,7 +53,9 @@ function App() {
               <button>Save</button>
           </form>
 
-          <CategoryCreateForm categories={categories} setCategories={(categories: Category[])=>setCategories(categories)}/>
+          <CategoryCreateForm
+              categories={categories}
+              setCategories={(categories: Category[])=> setCategories(categories)}/>
 
           <div className="list">
           {products.length> 0 ?
@@ -84,20 +77,24 @@ function App() {
           }
           </div>
 
-          <CategoryList categories={categories}
-                        setUpdatingCategory={(category: Category) => {
-                            setUpdatingCategory(category)
-                            setUpdatingCategoryValue(category.name)
-                        }
-                        }/>
+          <CategoryList
+              categories={categories}
+              setUpdatingCategory={(category: Category) => {
+                  setUpdatingCategory(category)
+                  setUpdatingCategoryValue(category.name)
+              }}
+              setDeletingCategory={(deletingCategory: Category) => {
+                  setCategories(categories.filter(category => deletingCategory.id !== category.id))
+              }}
+          />
 
-          {updatingCategory && (
-              <form onSubmit={handleUpdate}>
-                  <input type="text" value={updatingCategoryValue} onChange={e => setUpdatingCategoryValue(e.target.value)}/>
-                  <button>Save</button>
-              </form>
-          )}
-
+          <CategoryUpdateForm
+              updatingCategoryValue={updatingCategoryValue}
+              updatingCategory={updatingCategory}
+              categories={categories}
+              setCategories={setCategories}
+              setUpdatingCategoryValue={setUpdatingCategoryValue}
+              setUpdatingCategory={setUpdatingCategory} />
 
       </div>
 
