@@ -37,13 +37,9 @@ export function CategoryUpdateForm(
 
     }
     return (
-        <>
-            {updatingCategory && (
-                <form onSubmit={handleUpdate}>
-                    <input type="text" value={updatingCategoryValue} onChange={e => setUpdatingCategoryValue(e.target.value)}/>
-                    <button>Save</button>
-                </form>
-            )}
-        </>
+        <form onSubmit={handleUpdate}>
+            <input type="text" value={updatingCategoryValue} onChange={e => setUpdatingCategoryValue(e.target.value)}/>
+            <button>Save</button>
+        </form>
     )
 }

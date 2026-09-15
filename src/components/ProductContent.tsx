@@ -1,9 +1,9 @@
-import * as React from "react";
 import {type Dispatch, type SetStateAction, useState} from "react";
 import type {Category, Product} from "../types.ts";
 import {Modal} from "./Modal.tsx";
 import {ProductCreateForm} from "./ProductCreateForm.tsx";
 import {ProductList} from "./ProductList.tsx";
+import {ProductUpdateForm} from "./ProductUpdateForm.tsx";
 
 export type ProductContentProps = {
     products: Product[];
@@ -42,7 +42,17 @@ export  function ProductContent(
             }
             {isOpenUpdate &&
                 <Modal onClose={() => setIsOpenUpdate(false)}>
-                    Update Modal
+                    <ProductUpdateForm
+                        products={products}
+                        setProducts={setProducts}
+                        updatingProduct={updatingProduct}
+                        updatingProductName={updatingProductName}
+                        updatingProductPrice={updatingProductPrice}
+                        setUpdatingProduct={setUpdatingProduct}
+                        setUpdatingProductName={setUpdatingProductName}
+                        setUpdatingProductPrice={setUpdatingProductPrice}
+                        setIsOpenUpdate={setIsOpenUpdate}
+                    />
                 </Modal>
             }
 
