@@ -49,9 +49,9 @@ export function CategoryContent({categories,setCategories }:CategoryContentProps
             <CategoryList
                 categories={categories}
                 setUpdatingCategory={(category: Category) => {
-                    setUpdatingCategory(category)
-                    setUpdatingCategoryValue(category.name)
-                    setIsOpenUpdate(true)
+                    setUpdatingCategory(category);
+                    setUpdatingCategoryValue(category.name);
+                    setIsOpenUpdate(true);
                 }}
                 setDeletingCategory={(deletingCategory: Category) => {
                     setCategories(categories.filter(category => deletingCategory.id !== category.id))

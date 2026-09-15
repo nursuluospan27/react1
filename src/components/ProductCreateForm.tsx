@@ -5,14 +5,15 @@ import type {Category, Product} from "../types.ts";
 export type ProductCreateFormProps = {
     products: Product[]
     setProducts: Dispatch<SetStateAction<Product[]>>,
-    categories: Category[]
-
+    categories: Category[],
+    setIsOpen: Dispatch<SetStateAction<boolean>>
 }
 export function ProductCreateForm (
     {
         products,
         setProducts,
-        categories
+        categories,
+        setIsOpen
     } : ProductCreateFormProps){
 
     const [nameValue, setNameValue] = useState('');
@@ -31,6 +32,7 @@ export function ProductCreateForm (
         setNameValue('');
         setPriceValue(0);
         setCategoryValue('');
+        setIsOpen(false);
     }
 
     return (

@@ -2,8 +2,8 @@ import * as React from "react";
 import {type Dispatch, type SetStateAction, useState} from "react";
 import type {Category, Product} from "../types.ts";
 import {Modal} from "./Modal.tsx";
-import {CategoryCreateForm} from "./CategoryCreateForm.tsx";
 import {ProductCreateForm} from "./ProductCreateForm.tsx";
+import {ProductList} from "./ProductList.tsx";
 
 export type ProductContentProps = {
     products: Product[];
@@ -19,8 +19,11 @@ export  function ProductContent(
     }: ProductContentProps){
 
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false)
+    const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false);
 
+    const [updatingProduct, setUpdatingProduct] = useState<Product | null>(null);
+    const [updatingProductName, setUpdatingProductName] = useState('');
+    const [updatingProductPrice, setUpdatingProductPrice] = useState(0);
 
 
     return (
@@ -29,32 +32,33 @@ export  function ProductContent(
 
             {isOpen &&
                 <Modal onClose={() => setIsOpen(false)}>
-                    <ProductCreateForm products={products} setProducts={setProducts} categories={categories}/>
+                    <ProductCreateForm
+                        products={products}
+                        setProducts={setProducts}
+                        categories={categories}
+                        setIsOpen={setIsOpen}
+                    />
+                </Modal>
+            }
+            {isOpenUpdate &&
+                <Modal onClose={() => setIsOpenUpdate(false)}>
+                    Update Modal
                 </Modal>
             }
 
+            <ProductList
+                products={products}
+                setUpdatingProduct={(product: Product) => {
+                    setUpdatingProduct(product);
+                    setUpdatingProductName(product.name);
+                    setUpdatingProductPrice(product.price);
+                    setIsOpenUpdate(true);
+                }}
+                setDeletingProduct={(deletingProduct: Category) => {
+                    setProducts(products.filter(product => deletingProduct.id !== product.id))
+                }}
 
-            <div className="list">
-                {products.length> 0 ?
-                    <table>
-                        <tr>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Category</th>
-                        </tr>
-                        {products.map(product => (
-                            <tr>
-                                <td>{product.name}</td>
-                                <td>{product.price}</td>
-                                <td>{product?.category?.name}</td>
-                            </tr>
-                        ))
-                        }
-                    </table>
-                    :
-                    <p>Product`s list is empty</p>
-                }
-            </div>
+            />
         </>
     )
 }
