@@ -7,5 +7,5 @@ export type Product = {
     id: string,
     name: string,
     price: number,
-    category: Category
+    category: Category | null
 }

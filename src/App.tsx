@@ -20,7 +20,7 @@ function App() {
           </div>
           {isCategoryChosen
           ? <CategoryContent categories={categories} setCategories={setCategories}/>
-          : <ProductContent products={products} setProducts={setProducts}/>
+          : <ProductContent products={products} setProducts={setProducts} categories={categories}/>
           }
           </div>
   )

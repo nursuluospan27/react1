@@ -1,56 +1,52 @@
 import * as React from "react";
 import {type Dispatch, type SetStateAction, useState} from "react";
-import type {Product} from "../types.ts";
+import type {Category, Product} from "../types.ts";
+import {Modal} from "./Modal.tsx";
+import {CategoryCreateForm} from "./CategoryCreateForm.tsx";
+import {ProductCreateForm} from "./ProductCreateForm.tsx";
 
 export type ProductContentProps = {
     products: Product[];
     setProducts: Dispatch<SetStateAction<Product[]>>
+    categories: Category[]
 }
 
-export  function ProductContent({products, setProducts}: ProductContentProps){
-    const [nameValue, setNameValue] = useState('');
-    const [priceValue, setPriceValue] = useState(0);
+export  function ProductContent(
+    {
+        products,
+        setProducts,
+        categories
+    }: ProductContentProps){
 
-    function handleSubmit(e: React.SubmitEvent) {
-        e.preventDefault();
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false)
 
-        setProducts([...products, {"name": nameValue, "price": priceValue}]);
-        setNameValue('');
-        setPriceValue(0);
-    }
+
 
     return (
         <>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    value={nameValue}
-                    onChange={(e) => setNameValue(e.target.value)}
-                    required
-                    minLength={2}
-                    placeholder={"Input Name"}
-                />
-                <input
-                    type="number"
-                    value={priceValue}
-                    onChange={(e) => setPriceValue(Number(e.target.value))}
-                    required
-                    min={1}
-                    placeholder={"Input Price"}
-                />
-                <button>Save</button>
-            </form>
+            <button onClick={() => setIsOpen(true)} disabled={categories.length===0}>Create product</button>
+
+            {isOpen &&
+                <Modal onClose={() => setIsOpen(false)}>
+                    <ProductCreateForm products={products} setProducts={setProducts} categories={categories}/>
+                </Modal>
+            }
+
+
             <div className="list">
                 {products.length> 0 ?
                     <table>
                         <tr>
                             <th>Name</th>
                             <th>Price</th>
+                            <th>Category</th>
                         </tr>
                         {products.map(product => (
                             <tr>
                                 <td>{product.name}</td>
                                 <td>{product.price}</td>
+                                <td>{product?.category?.name}</td>
                             </tr>
                         ))
                         }
