@@ -1,0 +1,50 @@
+import {Modal} from "./Modal.tsx";
+import {CategoryCreateForm} from "./CategoryCreateForm.tsx";
+import type {Category} from "../types.ts";
+import {type Dispatch, type SetStateAction, useState} from "react";
+import {CategoryList} from "./CategoryList.tsx";
+import {CategoryUpdateForm} from "./CategoryUpdateForm.tsx";
+
+export type CategoryContentProps = {
+    categories: Category[];
+    setCategories: Dispatch<SetStateAction<Category[]>>
+}
+
+export function CategoryContent({categories,setCategories }:CategoryContentProps) {
+
+    const [updatingCategory, setUpdatingCategory] = useState<Category | null>(null);
+    const [updatingCategoryValue, setUpdatingCategoryValue] = useState('');
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+
+    return (
+        <>
+            <button onClick={() => setIsOpen(true)}>Create category</button>
+            {isOpen &&
+                <Modal onClose={() => setIsOpen(false)}>
+                    <CategoryCreateForm
+                        categories={categories}
+                        setCategories={(categories: Category[])=> setCategories(categories)}/>
+                </Modal>
+            }
+
+            <CategoryList
+                categories={categories}
+                setUpdatingCategory={(category: Category) => {
+                    setUpdatingCategory(category)
+                    setUpdatingCategoryValue(category.name)
+                }}
+                setDeletingCategory={(deletingCategory: Category) => {
+                    setCategories(categories.filter(category => deletingCategory.id !== category.id))
+                }}
+            />
+
+            <CategoryUpdateForm
+                updatingCategoryValue={updatingCategoryValue}
+                updatingCategory={updatingCategory}
+                categories={categories}
+                setCategories={setCategories}
+                setUpdatingCategoryValue={setUpdatingCategoryValue}
+                setUpdatingCategory={setUpdatingCategory} />
+        </>
+    )
+}

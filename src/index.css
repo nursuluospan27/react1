@@ -109,3 +109,30 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+.app-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.modal {
+    position: absolute;
+    inset: 0;
+    background: rgba(0 0 0/0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+
+}

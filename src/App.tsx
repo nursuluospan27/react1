@@ -1,103 +1,28 @@
 import {useState} from 'react'
 import './App.css'
-import type {Category} from "./types.ts";
-import {CategoryCreateForm} from "./components/CategoryCreateForm.tsx";
-import {CategoryList} from "./components/CategoryList.tsx";
-import {CategoryUpdateForm} from "./components/CategoryUpdateForm.tsx";
-import * as React from "react";
-
-type Product = {
-    name: string,
-    price: number
-}
+import type {Category, Product} from "./types.ts";
+import {CategoryContent} from "./components/CategoryContent.tsx";
+import {ProductContent} from "./components/ProductContent.tsx";
 
 function App() {
 
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [updatingCategory, setUpdatingCategory] = useState<Category | null>(null);
-  const [updatingCategoryValue, setUpdatingCategoryValue] = useState('');
-  // const [deletingCategory, setDeletingCategory] = useState<Category | null>(null);
-
-  const [nameValue, setNameValue] = useState('');
-  const [priceValue, setPriceValue] = useState(0);
+  const [isCategoryChosen, SetIsCategoryChosen] = useState<boolean>(true);
   const [products, setProducts] = useState<Product[]>([]);
-
-  function handleSubmit(e: React.SubmitEvent) {
-      e.preventDefault();
-
-      setProducts([...products, {"name": nameValue, "price": priceValue}]);
-      setNameValue('');
-      setPriceValue(0);
-  }
-
+  const [categories, setCategories] = useState<Category[]>([]);
 
   return (
       <div className={"hero"}>
-          <form onSubmit={handleSubmit}>
-              <input
-                  type="text"
-                  value={nameValue}
-                  onChange={(e) => setNameValue(e.target.value)}
-                  required
-                  minLength={2}
-                  placeholder={"Input Name"}
-              />
-              <input
-                  type="number"
-                  value={priceValue}
-                  onChange={(e) => setPriceValue(Number(e.target.value))}
-                  required
-                  min={1}
-                  placeholder={"Input Price"}
-              />
-              <button>Save</button>
-          </form>
-
-          <CategoryCreateForm
-              categories={categories}
-              setCategories={(categories: Category[])=> setCategories(categories)}/>
-
-          <div className="list">
-          {products.length> 0 ?
-            <table>
-                  <tr>
-                      <th>Name</th>
-                      <th>Price</th>
-                  </tr>
-                  {products.map(product => (
-                      <tr>
-                          <td>{product.name}</td>
-                          <td>{product.price}</td>
-                      </tr>
-                  ))
-                  }
-              </table>
-              :
-              <p>List is empty</p>
+          <div className={'app-top'}>
+              <ul>
+                  <li><a onClick={()=> SetIsCategoryChosen(true)}>Категории</a></li>
+                  <li><a onClick={() => SetIsCategoryChosen(false)}>Товары</a></li>
+              </ul>
+          </div>
+          {isCategoryChosen
+          ? <CategoryContent categories={categories} setCategories={setCategories}/>
+          : <ProductContent products={products} setProducts={setProducts}/>
           }
           </div>
-
-          <CategoryList
-              categories={categories}
-              setUpdatingCategory={(category: Category) => {
-                  setUpdatingCategory(category)
-                  setUpdatingCategoryValue(category.name)
-              }}
-              setDeletingCategory={(deletingCategory: Category) => {
-                  setCategories(categories.filter(category => deletingCategory.id !== category.id))
-              }}
-          />
-
-          <CategoryUpdateForm
-              updatingCategoryValue={updatingCategoryValue}
-              updatingCategory={updatingCategory}
-              categories={categories}
-              setCategories={setCategories}
-              setUpdatingCategoryValue={setUpdatingCategoryValue}
-              setUpdatingCategory={setUpdatingCategory} />
-
-      </div>
-
   )
 }
 

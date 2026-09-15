@@ -32,7 +32,7 @@ export function CategoryList(
                     }
                 </table>
                 :
-                <p>List is empty</p>
+                <p>Category`s list is empty</p>
             }
         </div>
     )
