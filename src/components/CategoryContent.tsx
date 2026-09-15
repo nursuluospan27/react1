@@ -15,15 +15,34 @@ export function CategoryContent({categories,setCategories }:CategoryContentProps
     const [updatingCategory, setUpdatingCategory] = useState<Category | null>(null);
     const [updatingCategoryValue, setUpdatingCategoryValue] = useState('');
     const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false)
 
     return (
         <>
             <button onClick={() => setIsOpen(true)}>Create category</button>
+
             {isOpen &&
                 <Modal onClose={() => setIsOpen(false)}>
                     <CategoryCreateForm
                         categories={categories}
-                        setCategories={(categories: Category[])=> setCategories(categories)}/>
+                        setCategories={(categories: Category[])=> setCategories(categories)}
+                        setIsOpen={setIsOpen}
+                    />
+                </Modal>
+            }
+
+            {isOpenUpdate &&
+                <Modal  onClose={() => setIsOpenUpdate(false)}>
+                    <CategoryUpdateForm
+                        updatingCategoryValue={updatingCategoryValue}
+                        updatingCategory={updatingCategory}
+                        categories={categories}
+                        setCategories={setCategories}
+                        setUpdatingCategoryValue={setUpdatingCategoryValue}
+                        setUpdatingCategory={setUpdatingCategory}
+                        setIsOpenUpdate={setIsOpenUpdate}
+                    />
+
                 </Modal>
             }
 
@@ -32,19 +51,13 @@ export function CategoryContent({categories,setCategories }:CategoryContentProps
                 setUpdatingCategory={(category: Category) => {
                     setUpdatingCategory(category)
                     setUpdatingCategoryValue(category.name)
+                    setIsOpenUpdate(true)
                 }}
                 setDeletingCategory={(deletingCategory: Category) => {
                     setCategories(categories.filter(category => deletingCategory.id !== category.id))
                 }}
             />
 
-            <CategoryUpdateForm
-                updatingCategoryValue={updatingCategoryValue}
-                updatingCategory={updatingCategory}
-                categories={categories}
-                setCategories={setCategories}
-                setUpdatingCategoryValue={setUpdatingCategoryValue}
-                setUpdatingCategory={setUpdatingCategory} />
         </>
     )
 }

@@ -1,12 +1,18 @@
-import {useState} from "react";
+import {type Dispatch, type SetStateAction, useState} from "react";
 import type {Category} from "../types.ts";
 
 export type CategoryCreateFormProps = {
     categories: Category[],
-    setCategories: (category: Category[]) => void
+    setCategories: (category: Category[]) => void,
+    setIsOpen: Dispatch<SetStateAction<boolean>>
 }
 
-export function CategoryCreateForm({categories, setCategories}: CategoryCreateFormProps) {
+export function CategoryCreateForm(
+    {
+        categories,
+        setCategories,
+        setIsOpen
+    }: CategoryCreateFormProps) {
 
     const [categoryName, setCategoryName] = useState('');
 
@@ -15,6 +21,7 @@ export function CategoryCreateForm({categories, setCategories}: CategoryCreateFo
         console.log(categoryName);
         setCategories([...categories, {"id": crypto.randomUUID(), "name": categoryName}]);
         setCategoryName('');
+        setIsOpen(false)
     }
 
     return (

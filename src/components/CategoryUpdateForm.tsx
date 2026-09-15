@@ -8,6 +8,7 @@ export type CategoryUpdateFormProps = {
     setCategories: Dispatch<SetStateAction<Category[]>>;
     setUpdatingCategoryValue: Dispatch<SetStateAction<string>>;
     setUpdatingCategory: Dispatch<SetStateAction<Category | null>>;
+    setIsOpenUpdate: Dispatch<SetStateAction<boolean>>
 }
 
 export function CategoryUpdateForm(
@@ -17,7 +18,8 @@ export function CategoryUpdateForm(
         categories,
         setCategories,
         setUpdatingCategory,
-        setUpdatingCategoryValue
+        setUpdatingCategoryValue,
+        setIsOpenUpdate
     } : CategoryUpdateFormProps){
 
     function handleUpdate(e: React.SubmitEvent){
@@ -31,6 +33,8 @@ export function CategoryUpdateForm(
         ));
         setUpdatingCategory(null);
         setUpdatingCategoryValue('');
+        setIsOpenUpdate(false)
+
     }
     return (
         <>
