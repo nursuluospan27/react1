@@ -1,0 +1,36 @@
+.main {
+    max-width: 1200px;
+    width: 80%;
+    min-width: 400px;
+    min-height: calc(100vh - 40px);
+    /*border-radius: 10px;*/
+    /*border: 1px solid #cccccc;*/
+    padding: 20px;
+}
+table {
+  margin: 20px auto;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+}
+
+.list {
+  margin-top: 20px;
+}
+
+form {
+    display: flex;
+    gap: 20px;
+}
+
+input {
+
+}
+
+button {
+
+}
