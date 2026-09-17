@@ -4,7 +4,7 @@ import type {Dispatch, SetStateAction} from "react";
 export type ProductUpdateFormProps = {
     products: Product[];
     setProducts: Dispatch<SetStateAction<Product[]>>;
-    updatingProduct: Product | null;
+    updatingProduct: Product;
     updatingProductName: string;
     updatingProductPrice: number;
     setUpdatingProduct: Dispatch<SetStateAction<Product | null>>;
@@ -59,7 +59,7 @@ export function ProductUpdateForm(
             />
             <input
                 type="text"
-                value={updatingProduct?.category?.name}
+                value={updatingProduct.categoryId}
                 disabled={true}
             />
             <button>Save</button>

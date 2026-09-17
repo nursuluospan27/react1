@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import './App.css'
 import type {Category, Product} from "./types.ts";
 import {CategoryContent} from "./components/CategoryContent.tsx";
@@ -9,6 +9,20 @@ function App() {
   const [isCategoryChosen, SetIsCategoryChosen] = useState<boolean>(true);
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+      fetch('https://practicetasks.kz/api/categories')
+          .then(resp => resp.json())
+          .then((categories: Category[]) => {
+              setCategories(categories);
+          })
+      fetch('https://practicetasks.kz/api/products')
+          .then(resp => resp.json())
+          .then((products: Product[]) => {
+              setProducts(products);
+          })
+    }
+  )
 
   return (
       <div className={"hero"}>

@@ -58,13 +58,14 @@ export  function ProductContent(
 
             <ProductList
                 products={products}
+                categories={categories}
                 setUpdatingProduct={(product: Product) => {
                     setUpdatingProduct(product);
                     setUpdatingProductName(product.name);
                     setUpdatingProductPrice(product.price);
                     setIsOpenUpdate(true);
                 }}
-                setDeletingProduct={(deletingProduct: Category) => {
+                setDeletingProduct={(deletingProduct: Product) => {
                     setProducts(products.filter(product => deletingProduct.id !== product.id))
                 }}
 

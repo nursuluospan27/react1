@@ -1,5 +1,5 @@
 export type Category = {
-    id: string,
+    id: number,
     name: string
 }
 
@@ -7,5 +7,5 @@ export type Product = {
     id: string,
     name: string,
     price: number,
-    category: Category | null
+    categoryId: number
 }

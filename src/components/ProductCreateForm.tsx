@@ -23,12 +23,9 @@ export function ProductCreateForm (
 
     function handleSubmit(e: React.SubmitEvent) {
         e.preventDefault();
-        const selectedCategory = categories.find(
-            (item) => item.id === categoryValue
-        );
-        if (!selectedCategory) return
+        if (!categoryValue) return
 
-        setProducts([...products, {id:  crypto.randomUUID(), name: nameValue, price: priceValue, category: selectedCategory}]);
+        setProducts([...products, {id:  crypto.randomUUID(), name: nameValue, price: priceValue, categoryId: Number(categoryValue)}]);
         setNameValue('');
         setPriceValue(0);
         setCategoryValue('');

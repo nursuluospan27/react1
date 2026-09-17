@@ -1,7 +1,8 @@
-import type {Product} from "../types.ts";
+import type {Category, Product} from "../types.ts";
 
 export type ProductListProps = {
     products: Product[],
+    categories: Category[],
     setUpdatingProduct: (product: Product) => void;
     setDeletingProduct: (product: Product) => void;
 }
@@ -10,7 +11,8 @@ export function ProductList(
     {
         products,
         setUpdatingProduct,
-        setDeletingProduct
+        setDeletingProduct,
+        // categories
     }: ProductListProps) {
     return (
         <div className="list">
@@ -26,7 +28,7 @@ export function ProductList(
                         <tr>
                             <td>{product.name}</td>
                             <td>{product.price}</td>
-                            <td>{product?.category?.name}</td>
+                            <td>{product.categoryId}</td>
                             <td>
                                 <button onClick={() => setUpdatingProduct(product)}>Edit</button>
                                 <button onClick={() => setDeletingProduct(product)}>Delete</button>
