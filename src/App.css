@@ -13,3 +13,8 @@ td {
   margin-top: 20px;
 }
 
+.error {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}

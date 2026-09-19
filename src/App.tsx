@@ -3,6 +3,7 @@ import './App.css'
 import type {Category, Product} from "./types.ts";
 import {CategoryContent} from "./components/CategoryContent.tsx";
 import {ProductContent} from "./components/ProductContent.tsx";
+import {getAllCategories, getAllProducts} from "./services/api.ts";
 
 function App() {
 
@@ -11,21 +12,22 @@ function App() {
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
-      fetch('https://practicetasks.kz/api/categories')
-          .then(resp => resp.json())
+      getAllCategories()
           .then((categories: Category[]) => {
               setCategories(categories);
           })
-      fetch('https://practicetasks.kz/api/products')
-          .then(resp => resp.json())
+          .catch((e) => {
+              console.log(e);
+              console.log("error get categories");
+          });
+      getAllProducts()
           .then((products: Product[]) => {
               setProducts(products);
           })
-    }
-  )
+    }, []);
 
   return (
-      <div className={"hero"}>
+      <div>
           <div className={'app-top'}>
               <ul>
                   <li><a onClick={()=> SetIsCategoryChosen(true)}>Категории</a></li>

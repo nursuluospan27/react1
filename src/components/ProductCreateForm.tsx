@@ -1,6 +1,7 @@
 import * as React from "react";
 import {type Dispatch, type SetStateAction, useState} from "react";
 import type {Category, Product} from "../types.ts";
+import {createProduct} from "../services/api.ts";
 
 export type ProductCreateFormProps = {
     products: Product[]
@@ -19,17 +20,29 @@ export function ProductCreateForm (
     const [nameValue, setNameValue] = useState('');
     const [priceValue, setPriceValue] = useState(0);
     const [categoryValue, setCategoryValue] = useState<string>('');
+    const [error, setError] = useState('');
 
 
     function handleSubmit(e: React.SubmitEvent) {
         e.preventDefault();
         if (!categoryValue) return
 
-        setProducts([...products, {id:  crypto.randomUUID(), name: nameValue, price: priceValue, categoryId: Number(categoryValue)}]);
-        setNameValue('');
-        setPriceValue(0);
-        setCategoryValue('');
-        setIsOpen(false);
+        setError('');
+
+        createProduct(nameValue, priceValue, Number(categoryValue))
+            .then((product: Product) => {
+                setProducts([
+                    ...products,
+                    product
+                ]);
+                setNameValue('');
+                setPriceValue(0);
+                setCategoryValue('');
+                setIsOpen(false);
+            })
+            .catch(() => {
+                setError('Failed to create the product.');
+            });
     }
 
     return (
@@ -64,6 +77,7 @@ export function ProductCreateForm (
                     <option key={item.id} value={item.id}>{item.name}</option>
                 ))}
             </select>
+            {error && <p className="error">{error}</p>}
             <button>Save</button>
         </form>
     )

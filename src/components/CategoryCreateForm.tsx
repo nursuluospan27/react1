@@ -1,9 +1,10 @@
 import {type Dispatch, type SetStateAction, useState} from "react";
 import type {Category} from "../types.ts";
+import {createCategory} from "../services/api.ts";
 
 export type CategoryCreateFormProps = {
     categories: Category[],
-    setCategories: (category: Category[]) => void,
+    setCategories: Dispatch<SetStateAction<Category[]>>,
     setIsOpen: Dispatch<SetStateAction<boolean>>
 }
 
@@ -15,13 +16,24 @@ export function CategoryCreateForm(
     }: CategoryCreateFormProps) {
 
     const [categoryName, setCategoryName] = useState('');
+    const [error, setError] = useState('');
 
     function handleSubmit(e: React.SubmitEvent) {
         e.preventDefault();
-        console.log(categoryName);
-        setCategories([...categories, {"id": crypto.randomUUID(), "name": categoryName}]);
-        setCategoryName('');
-        setIsOpen(false)
+        setError('');
+
+        createCategory(categoryName)
+            .then((category: Category) => {
+                setCategories([
+                    ...categories,
+                    category
+                ]);
+                setCategoryName('');
+                setIsOpen(false);
+            })
+            .catch(() => {
+                setError('Failed to create the category.');
+            });
     }
 
     return (
@@ -34,6 +46,7 @@ export function CategoryCreateForm(
                 minLength={2}
                 placeholder={"Input Name"}
             />
+            {error && <p className="error">{error}</p>}
             <button>Save</button>
         </form>
     )

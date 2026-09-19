@@ -1,8 +1,10 @@
-import type {Product} from "../types.ts";
-import type {Dispatch, SetStateAction} from "react";
+import type {Category, Product} from "../types.ts";
+import {type Dispatch, type SetStateAction, useState} from "react";
+import {updateProduct} from "../services/api.ts";
 
 export type ProductUpdateFormProps = {
     products: Product[];
+    category: Category;
     setProducts: Dispatch<SetStateAction<Product[]>>;
     updatingProduct: Product;
     updatingProductName: string;
@@ -15,6 +17,7 @@ export type ProductUpdateFormProps = {
 export function ProductUpdateForm(
     {
         products,
+        category,
         setProducts,
         updatingProduct,
         updatingProductName,
@@ -25,20 +28,30 @@ export function ProductUpdateForm(
         setIsOpenUpdate
     } : ProductUpdateFormProps){
 
+    const [error, setError] = useState('');
+
     function handleUpdate(e: React.SubmitEvent){
         e.preventDefault();
-        if(!updatingProduct) return;
-
-        setProducts(products.map(product =>
-            product.id === updatingProduct.id
-                ? {...updatingProduct, name: updatingProductName, price: updatingProductPrice}
-                : product
-        ));
-        setUpdatingProduct(null);
-        setUpdatingProductName('');
-        setUpdatingProductPrice(0);
-        setIsOpenUpdate(false)
-
+        setError('');
+        if(!updatingProduct) {
+            setError('Failed to update the category. NULL');
+            return
+        }
+        updateProduct({...updatingProduct, name: updatingProductName, price: updatingProductPrice })
+            .then((product: Product) => {
+                setProducts(products.map(item =>
+                    item.id === product.id
+                        ? product
+                        : item
+                ));
+                setUpdatingProduct(null);
+                setUpdatingProductName('');
+                setUpdatingProductPrice(0);
+                setIsOpenUpdate(false)
+            })
+            .catch(() => {
+                setError('Failed to update the product.');
+            });
     }
 
     return (
@@ -59,9 +72,10 @@ export function ProductUpdateForm(
             />
             <input
                 type="text"
-                value={updatingProduct.categoryId}
+                value={category?.name ?? "No category"}
                 disabled={true}
             />
+            {error && <p className="error">{error}</p>}
             <button>Save</button>
         </form>
     )

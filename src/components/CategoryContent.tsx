@@ -4,6 +4,7 @@ import type {Category} from "../types.ts";
 import {type Dispatch, type SetStateAction, useState} from "react";
 import {CategoryList} from "./CategoryList.tsx";
 import {CategoryUpdateForm} from "./CategoryUpdateForm.tsx";
+import {deleteCategory} from "../services/api.ts";
 
 export type CategoryContentProps = {
     categories: Category[];
@@ -15,7 +16,8 @@ export function CategoryContent({categories,setCategories }:CategoryContentProps
     const [updatingCategory, setUpdatingCategory] = useState<Category | null>(null);
     const [updatingCategoryValue, setUpdatingCategoryValue] = useState('');
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false)
+    const [isOpenUpdate, setIsOpenUpdate] = useState<boolean>(false);
+    const [error, setError] = useState('');
 
     return (
         <>
@@ -25,7 +27,7 @@ export function CategoryContent({categories,setCategories }:CategoryContentProps
                 <Modal onClose={() => setIsOpen(false)}>
                     <CategoryCreateForm
                         categories={categories}
-                        setCategories={(categories: Category[])=> setCategories(categories)}
+                        setCategories={setCategories}
                         setIsOpen={setIsOpen}
                     />
                 </Modal>
@@ -46,6 +48,7 @@ export function CategoryContent({categories,setCategories }:CategoryContentProps
                 </Modal>
             }
 
+            {error && <p className="error">{error}</p>}
             <CategoryList
                 categories={categories}
                 setUpdatingCategory={(category: Category) => {
@@ -54,7 +57,15 @@ export function CategoryContent({categories,setCategories }:CategoryContentProps
                     setIsOpenUpdate(true);
                 }}
                 setDeletingCategory={(deletingCategory: Category) => {
-                    setCategories(categories.filter(category => deletingCategory.id !== category.id))
+                    setError('');
+                    deleteCategory(deletingCategory.id)
+                        .then(() => {
+                            setCategories(categories.filter(category => deletingCategory.id !== category.id))
+                        })
+                        .catch(() => {
+                            setError('Failed to delete the category.');
+                        });
+
                 }}
             />
 

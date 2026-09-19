@@ -12,7 +12,7 @@ export function ProductList(
         products,
         setUpdatingProduct,
         setDeletingProduct,
-        // categories
+        categories
     }: ProductListProps) {
     return (
         <div className="list">
@@ -24,17 +24,23 @@ export function ProductList(
                         <th>Category</th>
                         <th></th>
                     </tr>
-                    {products.map(product => (
-                        <tr>
-                            <td>{product.name}</td>
-                            <td>{product.price}</td>
-                            <td>{product.categoryId}</td>
-                            <td>
-                                <button onClick={() => setUpdatingProduct(product)}>Edit</button>
-                                <button onClick={() => setDeletingProduct(product)}>Delete</button>
-                            </td>
-                        </tr>
-                    ))
+                    {products.map(product => {
+                        const category = categories.find(
+                            category => category.id === product.categoryId
+                        );
+                        return (
+                            <tr>
+                                <td>{product.name}</td>
+                                <td>{product.price}</td>
+                                <td>{category?.name ?? "No category"}</td>
+                                <td>
+                                    <button onClick={() => setUpdatingProduct(product)}>Edit</button>
+                                    <button onClick={() => setDeletingProduct(product)}>Delete</button>
+                                </td>
+                            </tr>
+                        )
+                    }
+                    )
                     }
                 </table>
                 :

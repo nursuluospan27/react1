@@ -4,6 +4,7 @@ import {Modal} from "./Modal.tsx";
 import {ProductCreateForm} from "./ProductCreateForm.tsx";
 import {ProductList} from "./ProductList.tsx";
 import {ProductUpdateForm} from "./ProductUpdateForm.tsx";
+import {deleteCategory, deleteProduct} from "../services/api.ts";
 
 export type ProductContentProps = {
     products: Product[];
@@ -24,7 +25,7 @@ export  function ProductContent(
     const [updatingProduct, setUpdatingProduct] = useState<Product | null>(null);
     const [updatingProductName, setUpdatingProductName] = useState('');
     const [updatingProductPrice, setUpdatingProductPrice] = useState(0);
-
+    const [error, setError] = useState('');
 
     return (
         <>
@@ -44,6 +45,9 @@ export  function ProductContent(
                 <Modal onClose={() => setIsOpenUpdate(false)}>
                     <ProductUpdateForm
                         products={products}
+                        category={categories.find(
+                            category => category.id === updatingProduct?.categoryId
+                        )}
                         setProducts={setProducts}
                         updatingProduct={updatingProduct}
                         updatingProductName={updatingProductName}
@@ -55,7 +59,7 @@ export  function ProductContent(
                     />
                 </Modal>
             }
-
+            {error && <p className="error">{error}</p>}
             <ProductList
                 products={products}
                 categories={categories}
@@ -66,7 +70,15 @@ export  function ProductContent(
                     setIsOpenUpdate(true);
                 }}
                 setDeletingProduct={(deletingProduct: Product) => {
-                    setProducts(products.filter(product => deletingProduct.id !== product.id))
+                    setError('');
+                    deleteProduct(deletingProduct.id)
+                        .then(() => {
+                            setProducts(products.filter(product => deletingProduct.id !== product.id))
+                        })
+                        .catch(() => {
+                            setError('Failed to delete the product.');
+                        });
+
                 }}
 
             />
