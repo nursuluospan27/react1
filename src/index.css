@@ -34,6 +34,31 @@ p {
     border-radius: 10px;
 }
 
+.delete-confirmation {
+    min-width: 320px;
+}
+
+.delete-confirmation h2 {
+    margin-top: 0;
+}
+
+.delete-confirmation ul {
+    display: block;
+    padding-left: 24px;
+    list-style: disc;
+}
+
+.delete-confirmation p + p {
+    margin-top: 20px;
+}
+
+.delete-confirmation__actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    margin-top: 24px;
+}
+
 ul {
     list-style: none;
     display: flex;

@@ -19,7 +19,12 @@ function App() {
               </ul>
           </div>
           {isCategoryChosen
-          ? <CategoryContent categories={categories} setCategories={setCategories}/>
+          ? <CategoryContent
+                  categories={categories}
+                  setCategories={setCategories}
+                  products={products}
+                  setProducts={setProducts}
+              />
           : <ProductContent products={products} setProducts={setProducts} categories={categories}/>
           }
           </div>
